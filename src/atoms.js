@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 export const networkAtom = atom({
-    key:"networkAtom",
+    key:"networkAtom",  // keys should be unique for every atoms
     default:104
 })
 
