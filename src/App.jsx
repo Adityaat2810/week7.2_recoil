@@ -1,4 +1,4 @@
-import { RecoilRoot, useRecoilState } from 'recoil';
+import { RecoilRoot, useRecoilStateLoadable } from 'recoil';
 import { todosAtomFamily } from './atoms';
 
 function App() {
@@ -9,12 +9,15 @@ function App() {
 }
 
 function Todo({id}) {
-   const [todo, setTodo] = useRecoilState(todosAtomFamily(id));
-
-  return (
+   const [todo, setTodo] = useRecoilStateLoadable(todosAtomFamily(id));
+   if (todo.state === "loading") {
+      return <div>loading</div>
+   }
+   
+   return (
     <>
-      {todo.title}
-      {todo.description}
+      {todo.contents.title}
+      {todo.contents.description}
       <br />
     </>
   )
