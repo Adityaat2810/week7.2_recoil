@@ -5,10 +5,6 @@ function App() {
   return <RecoilRoot>
     <Todo id={1}/>
     <Todo id={2} />
-    <Todo id={1}/>
-    <Todo id={2} />
-    <Todo id={1}/>
-    <Todo id={2} />
   </RecoilRoot>
 }
 
@@ -17,7 +13,7 @@ function Todo({id}) {
 
   return (
     <>
-      <div>{todo.title}</div>
+      {todo.title}
       {todo.description}
       <br />
     </>
