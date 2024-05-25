@@ -1,43 +1,38 @@
-import React, { useMemo } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { jobsAtom, messagingAtom, networkAtom, notificationAtom, totalNotificationSelector } from './atoms'
-//never forget to wrap inside RecoilRoot
 
-/**
- * Let say i wnat to render sum of all types of notifiaction
- * on the me button.
- */
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { notifications, totalNotificationSelector } from './atoms'
+import { useEffect } from 'react'
+import axios from 'axios'
 
-/**
- *solved using selectors 
- */
+function App() {
+  return <RecoilRoot>
+    <MainApp />
+  </RecoilRoot>
+}
 
-const App = () => {
-  
-  const networkNotifiactionCount = useRecoilValue(networkAtom)
-  const jobsNotificationCount =useRecoilValue(jobsAtom)
-  const notificationValue = useRecoilValue(notificationAtom)
+function MainApp() {
+  const [networkCount, setNetworkCount] = useRecoilState(notifications)
+  const totalNotificationCount = useRecoilValue(totalNotificationSelector);
 
-   const [messagingNotificationValue,setMessageAtomCount] =useRecoilState(messagingAtom)
-  const totalCount = useRecoilState(totalNotificationSelector)
+  useEffect(() => {
+    // fetch
+    axios.get("https://sum-server.100xdevs.com/notifications")
+      .then(res => {
+        setNetworkCount(res.data)
+      })
+  }, [])
 
   return (
-
-    <div>
-
-
-
+    <>
       <button>Home</button>
-      <button>My Network {networkNotifiactionCount}</button>
-      <button>Jobs {jobsNotificationCount}</button>
-       <button>Messaging {messagingNotificationValue}</button> 
-      <button>Notification {notificationValue}</button>
-      <button onClick={()=>{
-        setMessageAtomCount(messagingNotificationValue+1)
-      }}>Me ({totalCount})</button>
+      
+      <button>My network ({networkCount.network >= 100 ? "99+" : networkCount.network})</button>
+      <button>Jobs {networkCount.jobs}</button>
+      <button>Messaging ({networkCount.messaging})</button>
+      <button>Notifications ({networkCount.notifications})</button>
 
-
-    </div>
+      <button>Me ({totalNotificationCount})</button>
+    </>
   )
 }
 
